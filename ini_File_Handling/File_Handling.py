@@ -50,6 +50,7 @@ f.close()"""
 
 # Write (Overwrite) ---------------------------------------
 
+
 """f = open("context.txt","w")
 f.write("kamu kena hack")
 f.close()"""
@@ -69,3 +70,21 @@ if not os.path.exists("ngga.txt"):
     print("eweh")
     f = open("ngga.txt",'x')
     f.close()
+else:
+    print("Filenya sudah ada")
+
+# Delete a file
+# avoid an error if it doesnt exist
+
+"""if os.path.exists("ngga.txt"):
+    os.remove("ngga.txt")
+    print("FIle ngga.txt has been deleted")
+else:
+    print("Filenya tidak ada")"""
+
+
+with open("ngga.txt") as f:
+    content = f.read()
+
+with open("nama.txt",'w') as f:
+    f.write(content)
