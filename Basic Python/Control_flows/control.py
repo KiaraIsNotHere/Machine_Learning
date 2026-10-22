@@ -12,6 +12,7 @@ Greater than or equal to: a >= b
 
 a = random.randrange(0,100)
 b = random.randrange(0,100)
+
 # Basic if elif else ------------------------------------------------------------------------------------------------
 
 """if int(a) < 0:

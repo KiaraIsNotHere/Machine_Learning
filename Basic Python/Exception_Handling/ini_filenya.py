@@ -20,13 +20,15 @@
 # SyntaxError           Raised when the interpreter encounters invalid Python code structure.
 # IndentationError      Incorrect spacing or alignment of code blocks
 
+while True:
+    try:
+        n = int(input("Enter a number: "))
+        print(2 / n)
+        break
+    except ZeroDivisionError:
+        print("Cant divide by zero")
+    except ValueError:
+        print("can only enter a number")
+    finally:
+        print("test sudah berjalan")
 
-try:
-    n = int(input("Enter a number: "))
-    print(2 / n)
-except ZeroDivisionError:
-    print("Cant divide by zero")
-except ValueError:
-    print("can only enter a number")
-finally:
-    print("test sudah berjalan")
