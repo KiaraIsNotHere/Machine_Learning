@@ -24,3 +24,14 @@ vector = tch.tensor( [7, 7, 7] )
 MATRIX = tch.tensor([[1,2], [11,12]])
 print(MATRIX.ndim)
 print(MATRIX)
+
+
+
+# TENSOR
+TENSOR = tch.tensor([[[1,2,3],
+                      [4,5,6],
+                      [7,8,9]]])
+#print(TENSOR.shape) --> torch.size([1,3,3])
+
+# img for make it more understand
+img = "image/ndim of tensor.png" # --> dari tensor diatas 1 = kurung ungu, 3 = kurung biru, 3 = kurung ungu
