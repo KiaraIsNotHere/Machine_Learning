@@ -172,7 +172,7 @@ x = tch.arange(0, 100 + 1, 10)
 tch.min(x), x.min
 
 # Find the mean - need to be a float
-print(tch.mean(x.type(tch.float64))), x.type(tch.float32).mean()
+#print(tch.mean(x.type(tch.float64))), x.type(tch.float32).mean()
 
 
 ### Finding the positional min and max
@@ -204,4 +204,120 @@ x = tch.arange(1., 10.)
 x_reshaped = x.reshape(1, 9)
 
 
+# Change the view 
+z = x.view(1, 9)
 
+# Changing z changes x (because a view of a tensor shares the same memory as the original input)
+z[:, 0] = 5
+
+# Stack tensors on top of each other
+x_stacked = tch.stack([x, x, x, x], dim=0)
+#print(x_stacked)
+
+
+## torch.squezee - removes all single dimensions from a target tensor
+#print("Previous Tensor - Shape",x_reshaped, x_reshaped.shape)
+
+
+# Remove extra dimensions from x_reshaped
+x_squeezed = x_reshaped.squeeze()
+#print(f"\nNew tensor: {x_squeezed} and size {x_squeezed.shape}")
+
+
+
+# torch.unsqueeze() - adds a single dimension to a target tensor at a specific dim (dimension) |     Menghilangkan dimensi
+#print(f"Previous target: {x_squeezed}")
+#print(f"Previous shape: {x_squeezed.shape}")
+
+# Add an extra dimension with unsqueeze   | Menambah dimensi
+x_unsqueezed = x_squeezed.unsqueeze(dim=0)
+#print(f"\nNew tensor: {x_unsqueezed} | Shape: {x_unsqueezed.shape}")
+
+
+
+# torch.permute - rearranges the dimensions of a target tensor in a specified order
+x_original = tch.rand(size=(224, 224, 3)) # [weight, width, colour_channel]
+
+
+# permute the original tensor to rearrange the axis (or dim) order |        Merubah urutan
+x_permuted = x_original.permute(2, 0, 1) # Shift axis 224 -> Kedua, 224 -> ketiga, 3 -> pertama
+
+
+### Indexing (selecting)
+
+x = tch.arange(1, 10).reshape(1, 3 ,3)
+
+
+# Index on our tensor
+#print(f"Angka 9: {x[0, 2, 2]}")
+
+
+# You can also use ":" to select "all of the target dimension"
+#print(x[:, 0])
+
+
+# Get all values of 0th and 1st dimensions but only index 1 of 2nd dimension
+#print(x[:, :, 1])
+
+# Get all values of the 0 dimension but only the 1 index value of 1st and 2nd dimension
+#print(x[:, 1, 1])
+
+# Get index 0 of 0th and 1st dimension and all values of 2nd dimension
+#print(x[0, 0, :])
+
+
+
+
+### NumPy
+
+# NumPy array to tensor
+
+array = np.arange(1.0, 8.0)
+tensor = tch.from_numpy(array) # Will be torch.float64
+
+# Change the value of arraay
+array += 1
+
+# Tensor to NumPy array
+tensor = tch.ones(7)
+numpy_tensor = tensor.numpy()
+
+# Foot Notes: both dont share same memory
+
+
+
+### Reproducbility (trying to take random out of random)
+# in short
+# Start with random numbers -> tensor operations -> update random numbers to try and make them better representasions of the data -> again -> again -> again -> again ....
+
+
+# To reduce the randomness in neural networks and PyTorch comes in the concept of a 'random seed'
+# Essentialy what the random seed does in "flavour" the randomness
+
+rand_tens_A = tch.rand(3, 4)
+rand_tens_B = tch.rand(3, 4)
+
+
+# Make some random but reproducible tensors
+
+# Set the random seed
+tch.manual_seed(67) # Only work with 1 block of code
+
+rand_tens_C = tch.rand(3, 4)
+
+tch.manual_seed(67)
+rand_tens_D = tch.rand(3, 4)
+
+#print(rand_tens_C)
+#print(rand_tens_D)
+#print(rand_tens_C == rand_tens_D)
+
+
+
+### Running tensors and PyTorch objects on the gpu (and making faster computations)
+
+# Check for GPU acces with PyTorch
+#print(tch.cuda.is_available())
+
+# Setup device agnostic code
+device = 'cuda' if tch.cuda.is_available() else 'cpu'
