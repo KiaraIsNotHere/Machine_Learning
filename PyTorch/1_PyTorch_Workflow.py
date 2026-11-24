@@ -145,3 +145,56 @@ with tch.inference_mode():
 
 
 
+# Setup a loss function
+loss_fn = nn.L1Loss()
+
+
+
+
+
+
+# Setup an optimizer (Stochastic Gradient Descent)
+optimizer = tch.optim.SGD(params= model_0.parameters(),
+                          lr= 0.01)
+
+
+### Building a training loop (and a testing loop) in PyTorch
+
+# 0 Loop through the data
+# 1 Forward pass (this involves data moving through our model forward() function) to make prediction on data - also called forward propogation
+# 2 Calculate the loss (compare forward pass predictions to ground truth labels)
+# 3 Optimizer zero grad
+# 4 Loss backward - move backwards through the network to calculate the gradients of each the parameters of our model with respect to the loss 
+# 5 Optimizer step - use the optimizer to adjust our models parameters to try and improve the loss
+
+
+# An epoch is one loop through the data... (this is a hyperparameter because we've set it ourselves)
+epochs = 1
+
+
+
+### Training
+# 0. Loop through the data
+for epoch in range(epochs):
+    # Set the mode to training mode
+    model_0.train() # train mode in PyTorch sets all parameters that require gradients to require gradients
+
+    # 1. Forward pass
+    y_pred = model_0(X_train)
+
+    # 2. Calculate the loss
+    loss = loss_fn
+
+    # 3. optimizer zero grad
+    optimizer.zero_grad()
+
+    # 4. Perform backpropogation on the loss with respect to the parameters of the model 
+    loss.backward()
+
+    # 5. Step the optimizer (perform gradient descent)
+    optimizer.step() # by default how the optimizer changes will acumulate through the loop so.. we have to zero them above in the step 3 for the next iterarion of the loop
+
+    model_0.eval() # turns off gradient tracking
+
+
+# 48
