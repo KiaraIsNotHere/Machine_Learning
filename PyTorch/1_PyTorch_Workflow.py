@@ -76,15 +76,11 @@ def plot_predic(train_data = X_train, train_label = y_train,
 class LineaerRegressionModel(nn.Module):
     def __init__(self):
         super().__init__()
-        self.weight = nn.Parameter(tch.rand(1, 
-                                            requires_grad = True,
-                                            dtype= tch.float))
+        self.weight = nn.Parameter(tch.rand(1,requires_grad = True,dtype= tch.float))
 
-        self.bias = nn.Parameter(tch.randn(1,
-                                           dtype= tch.float,
-                                           requires_grad= True))
+        self.bias = nn.Parameter(tch.randn(1,requires_grad= True,dtype= tch.float))
 
-    # Fowrward method to define the computation in the model
+    # Forward method to define the computation in the model
     def forward(self, x: tch.Tensor) -> tch.Tensor:  # x is the input data
         return self.weight * x + self.bias # this is liear regression formula
 
@@ -144,18 +140,12 @@ with tch.inference_mode():
 
 
 
-
-# Setup a loss function
+# Setup a loss funcion
 loss_fn = nn.L1Loss()
 
+#Setup an optimizer
+optimizer = tch.optim.SGD(params=model_0.parameters(), lr= 0.01) #lr = Learning rate
 
-
-
-
-
-# Setup an optimizer (Stochastic Gradient Descent)
-optimizer = tch.optim.SGD(params= model_0.parameters(),
-                          lr= 0.01)
 
 
 ### Building a training loop (and a testing loop) in PyTorch
@@ -167,11 +157,9 @@ optimizer = tch.optim.SGD(params= model_0.parameters(),
 # 4 Loss backward - move backwards through the network to calculate the gradients of each the parameters of our model with respect to the loss 
 # 5 Optimizer step - use the optimizer to adjust our models parameters to try and improve the loss
 
-
+tch.manual_seed(42)
 # An epoch is one loop through the data... (this is a hyperparameter because we've set it ourselves)
-epochs = 1
-
-
+epochs = 100
 
 ### Training
 # 0. Loop through the data
@@ -180,10 +168,10 @@ for epoch in range(epochs):
     model_0.train() # train mode in PyTorch sets all parameters that require gradients to require gradients
 
     # 1. Forward pass
-    y_pred = model_0(X_train)
+    y_preds = model_0(X_train)
 
     # 2. Calculate the loss
-    loss = loss_fn
+    loss = loss_fn(y_preds, y_train)
 
     # 3. optimizer zero grad
     optimizer.zero_grad()
@@ -194,7 +182,29 @@ for epoch in range(epochs):
     # 5. Step the optimizer (perform gradient descent)
     optimizer.step() # by default how the optimizer changes will acumulate through the loop so.. we have to zero them above in the step 3 for the next iterarion of the loop
 
-    model_0.eval() # turns off gradient tracking
 
 
-# 48
+    ### Testing
+    model_0.eval() # turns off different settings in the model not needed for evaluation / testing (dropout / batch norm layers)
+    with tch.inference_mode(): # turns off gradient tracking & couple more things behind the scenes
+        # 1. Do the forward pass
+        test_pred = model_0(X_test)
+
+        # 2. Calculate the loss
+        test_loss = loss_fn(test_pred, y_test.type(tch.float))
+
+
+
+    # Print out 
+    if epoch % 10 == 0:
+        print(f"Epoch: {epoch} | Loss: {loss} | Test Loss: {test_loss}")
+
+
+
+
+
+
+
+
+
+
